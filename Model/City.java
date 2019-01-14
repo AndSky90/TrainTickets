@@ -1,12 +1,14 @@
 package com.i550.traintickets.Model;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class City {
     private String countryTitle;
-    private Map<String, Long> point;
+    private GpsPoint point;
     private String districtTitle;           // "Чистопольский район", название района
     private String cityId;                   //" : 4454, //идентификатор города
     private String cityTitle;                //: "Чистополь", //название города
@@ -17,7 +19,7 @@ public class City {
         return countryTitle;
     }
 
-    public Map<String, Long> getPoint() {
+    public GpsPoint getPoint() {
         return point;
     }
 

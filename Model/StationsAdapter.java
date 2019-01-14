@@ -63,7 +63,7 @@ public class StationsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(android.R.layout.simple_list_item_1, null);
+            view = inflater.inflate(android.R.layout.simple_expandable_list_item_1 , null);
         }
 
         /*if (b){
@@ -96,9 +96,9 @@ public class StationsAdapter extends BaseExpandableListAdapter {
         TextView districtTitle =  view.findViewById(R.id.district_title);
         districtTitle.setText(station.getDistrictTitle());
         TextView longitude = view.findViewById(R.id.longitude_title);
-        longitude.setText(Long.toString(station.getPoint().getLongitude()));
+        longitude.setText(station.getPoint().getLongitude());
         TextView latitude = view.findViewById(R.id.latitude_title);
-        latitude.setText(Long.toString(station.getPoint().getLatitude()));
+        latitude.setText(station.getPoint().getLatitude());
 
         Button button = view.findViewById(R.id.choose_button);
         button.setOnClickListener(new View.OnClickListener() {

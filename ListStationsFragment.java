@@ -17,27 +17,28 @@ import com.i550.traintickets.Model.StationsAdapter;
 import java.util.ArrayList;
 
 public class ListStationsFragment extends Fragment {
-
     ArrayList<City> cities;
-    DataModel dm = ViewModelProviders.of(getActivity()).get(DataModel.class);
+    DataModel vm;
+    public final static String TAG = "LIST";
 
-    public static ListStationsFragment newInstance(int fromOrTo) {
+    public static ListStationsFragment newInstance(int mode) {
         Bundle b = new Bundle();
-        b.putInt("fromOrTo", fromOrTo);
+        b.putInt("mode", mode);
         ListStationsFragment fragment = new ListStationsFragment();
         fragment.setArguments(b);
         return fragment;
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vm = ViewModelProviders.of(getActivity()).get(DataModel.class);
+
         if (getArguments() != null) {
-            int fromOrTo = getArguments().getInt("fromOrTo");
-            if (fromOrTo == 0)
-                cities = dm.getDb().getCitiesFrom();
-            else cities = dm.getDb().getCitiesTo();
+            int mode = getArguments().getInt("mode");
+            if (mode == 0)
+                cities = vm.getDb().getCitiesFrom();
+            else cities = vm.getDb().getCitiesTo();
         }
     }
 

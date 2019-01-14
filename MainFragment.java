@@ -1,5 +1,6 @@
 package com.i550.traintickets;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,13 +27,12 @@ public class MainFragment extends Fragment {
 
     private Order order = new Order();
     private static final String DATE_PICKER = "DatePicker";
-    private static final int LIST_FROM = 0;
-    private static final int LIST_TO = 1;
+
     private static final int REQ_CODE_DATE = 2019;
     private static DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
     Button datePickerButton, fromButton, toButton;
     ImageButton swapButton;
-
+    private FragmentClickListener mListener;
 
     @Nullable
     @Override
@@ -50,14 +50,12 @@ public class MainFragment extends Fragment {
             }
         });
 
+
         fromButton = v.findViewById(R.id.from_button);
         fromButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListStationsFragment fragment = ListStationsFragment.newInstance(LIST_FROM);
-                fragment.setTargetFragment(MainFragment.this, LIST_FROM);
-                fm.beginTransaction().replace(R.id.fragment_container, fragment);
-
+                mListener.onFragmentClick(R.id.from_button);
             }
         });
 
@@ -65,9 +63,7 @@ public class MainFragment extends Fragment {
         toButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListStationsFragment fragment = ListStationsFragment.newInstance(LIST_TO);
-                fragment.setTargetFragment(MainFragment.this, LIST_TO);
-                fm.beginTransaction().replace(R.id.fragment_container, fragment);
+                mListener.onFragmentClick(R.id.to_button);
             }
         });
 
@@ -75,9 +71,7 @@ public class MainFragment extends Fragment {
         swapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // DatePickerFragment dateDialog = DatePickerFragment.newInstance(new Date());
-                // dateDialog.setTargetFragment(MainFragment.this,REQ_CODE_DATE);
-                //  dateDialog.show(fm, DATE_PICKER);
+                mListener.onFragmentClick(R.id.swap_button);
             }
         });
 
@@ -92,6 +86,17 @@ public class MainFragment extends Fragment {
             Date date = (Date) intent.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             order.setDate(date);
             datePickerButton.setText(df.format(order.getDate()));
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentClickListener) {
+            mListener = (FragmentClickListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "not a valid context");
         }
     }
 }

@@ -1,14 +1,14 @@
 package com.i550.traintickets.Model;
 
 public class GpsPoint {
-    private Long longitude;
-    private Long latitude;
+    private String longitude;
+    private String latitude;
 
-    public Long getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public Long getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 }
