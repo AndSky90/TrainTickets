@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.i550.traintickets.R;
 
@@ -17,10 +16,13 @@ public class StationsAdapter extends BaseExpandableListAdapter {
 
     private ArrayList<City> mCities;
     private Context mContext;
+    private int mMode;
+    private static ClickListener clickListener;
 
-    public StationsAdapter (Context context,ArrayList<City> cities){
+    public StationsAdapter(Context context, ArrayList<City> cities, int mode) {
         mContext = context;
         mCities = cities;
+        mMode = mode;
     }
 
 
@@ -63,7 +65,7 @@ public class StationsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(android.R.layout.simple_expandable_list_item_1 , null);
+            view = inflater.inflate(R.layout.tit_group_view, null);
         }
 
         /*if (b){
@@ -73,10 +75,9 @@ public class StationsAdapter extends BaseExpandableListAdapter {
             //Изменяем что-нибудь, если текущая Group скрыта
         }*/
 
-        TextView text = view.findViewById(android.R.id.text1);
-        City c = (City)getGroup(i);
-        text.setText(c.getCountryTitle() + ", " + c.getCityTitle());
-
+        TextView text1 = view.findViewById(android.R.id.text1);
+        City c = (City) getGroup(i);
+        text1.setText(c.getCountryTitle() + ", " + c.getCityTitle());
         return view;
 
     }
@@ -87,13 +88,14 @@ public class StationsAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.fragment_station, null);
         }
-        final Station station = (Station) getChild(c,s);
-
+        final Station station = (Station) getChild(c, s);
+        TextView stationTitle = view.findViewById(R.id.station_title);
+        stationTitle.setText(station.getStationTitle());
         TextView countryTitle = view.findViewById(R.id.country_title);
         countryTitle.setText(station.getCountryTitle());
-        TextView regionTitle =  view.findViewById(R.id.region_title);
+        TextView regionTitle = view.findViewById(R.id.region_title);
         regionTitle.setText(station.getRegionTitle());
-        TextView districtTitle =  view.findViewById(R.id.district_title);
+        TextView districtTitle = view.findViewById(R.id.district_title);
         districtTitle.setText(station.getDistrictTitle());
         TextView longitude = view.findViewById(R.id.longitude_title);
         longitude.setText(station.getPoint().getLongitude());
@@ -101,10 +103,14 @@ public class StationsAdapter extends BaseExpandableListAdapter {
         latitude.setText(station.getPoint().getLatitude());
 
         Button button = view.findViewById(R.id.choose_button);
+
+
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext,station.getCityId(),Toast.LENGTH_SHORT).show();
+                clickListener.onItemClick(station);
             }
         });
 
@@ -112,8 +118,16 @@ public class StationsAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    public void setButtonClickListener(ClickListener clickListener) {
+        StationsAdapter.clickListener = clickListener;
+    }
+
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;
+    }
+
+    public interface ClickListener {
+        void onItemClick(Station station);
     }
 }

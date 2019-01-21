@@ -4,25 +4,27 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.i550.traintickets.Model.DataModel;
 import com.i550.traintickets.Model.StationsDataBase;
 
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class MainActivity extends AppCompatActivity implements FragmentClickListener {
-    private static final String TAG = "550";
-    private static final int LIST_FROM = 0;
-    private static final int LIST_TO = 1;
+public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "TrainTickets";
+    private static final String ABOUT_TAG = "ABOUT";
+    public static final String STATION = "Station";
     private DataModel dm;
     FragmentManager fm;
     Fragment container;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements FragmentClickList
             container = new MainFragment();
             fm.beginTransaction().add(R.id.fragment_container, container).commit();
         }
+
 
         dm = ViewModelProviders.of(this).get(DataModel.class);                              //viewmodel with all data
         String jsonString = "";
@@ -63,35 +66,28 @@ public class MainActivity extends AppCompatActivity implements FragmentClickList
     }
 
     @Override
-    public void onFragmentClick(int id) {                                                           //handling button clicks and fragments replacement
-        switch (id) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-            case R.id.from_button: {
-                ListStationsFragment fragmentReplace;
-                fragmentReplace = ListStationsFragment.newInstance(LIST_FROM);
-                fm.beginTransaction()
-                        .replace(R.id.fragment_container, fragmentReplace, fragmentReplace.TAG)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .addToBackStack(fragmentReplace.TAG)
-                        .commit();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.schedule:
+                fm.beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
                 break;
-            }
-            case R.id.to_button: {
-                ListStationsFragment fragmentReplace;
-                fragmentReplace = ListStationsFragment.newInstance(LIST_TO);
-                fm.beginTransaction()
-                        .replace(R.id.fragment_container, fragmentReplace, fragmentReplace.TAG)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .addToBackStack(fragmentReplace.TAG)
-                        .commit();
+
+            case R.id.about:
+                fm.beginTransaction().replace(R.id.fragment_container, new AboutFragment()).addToBackStack(ABOUT_TAG).commit();
                 break;
-            }
+
             default:
-                Log.i(TAG, "Default click (SWAP)");
                 break;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }
- /*   ListStationsFragment fragment = ListStationsFragment.newInstance(LIST_FROM);
-                fragment.setTargetFragment(MainFragment.this, LIST_FROM);
-                        fm.beginTransaction().replace(R.id.fragment_container, fragment);*/

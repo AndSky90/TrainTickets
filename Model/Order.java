@@ -1,11 +1,13 @@
 package com.i550.traintickets.Model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 public class Order {
     private Date date;
-    private int station_id_from;
-    private int station_id_to;
+    private Station stationFrom;
+    private Station stationTo;
 
     public Date getDate() {
         return date;
@@ -15,19 +17,25 @@ public class Order {
         this.date = date;
     }
 
-    public int getStation_id_from() {
-        return station_id_from;
+    public Station getStationFrom() {
+        return stationFrom;
     }
 
-    public void setStation_id_from(int station_id_from) {
-        this.station_id_from = station_id_from;
+    public void setStationFrom(Station stationFrom) {
+        this.stationFrom = stationFrom;
     }
 
-    public int getStation_id_to() {
-        return station_id_to;
+    public Station getStationTo() {
+        return stationTo;
     }
 
-    public void setStation_id_to(int station_id_to) {
-        this.station_id_to = station_id_to;
+    public void setStationTo(Station stationTo) {
+        this.stationTo = stationTo;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return date.toString() + " from " + stationFrom.getStationTitle() + " to " + stationTo.getStationTitle() ;
     }
 }
